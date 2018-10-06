@@ -251,24 +251,6 @@ class FormWelcome extends Component {
             renderSwitch={this.renderSwitch}
           />
         )}
-        {/* <form className="webForm" onSubmit={this.handleSubmit}>
-          {this.state.questions.map(
-            question =>
-              question.hidden === false ? (
-                <Fragment key={question.id}>
-                  <h3 className="qText">{question.text}</h3>
-                  {this.renderSwitch(question)}
-                </Fragment>
-              ) : null
-          )}
-        </form>
-        <Button
-          modifier="large--cta"
-          className="submitBtn"
-          onClick={this.handleSubmit}
-        >
-          Submit
-        </Button> */}
       </div>
     );
   }
