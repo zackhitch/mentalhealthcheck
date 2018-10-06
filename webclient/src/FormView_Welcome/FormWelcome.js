@@ -5,6 +5,8 @@ import db from '../firebase.js';
 
 import './FormWelcome.css';
 import logo from '../assets/align-02.png';
+import FormCompletedView from '../FormCompletedView/FormCompletedView.js';
+import FormOpen from './FormOpen';
 
 class FormWelcome extends Component {
   state = {
@@ -13,11 +15,12 @@ class FormWelcome extends Component {
       time: 0,
       start: 0,
     },
+    submitted: false,
     questions: [
       {
         id: 1,
         text: 'Have you had thoughts of suicide within the past 24 hours?',
-        hidden: true,
+        hidden: false,
         replyModel: 'scale',
         answers: [
           {
@@ -66,7 +69,7 @@ class FormWelcome extends Component {
       {
         id: 4,
         text: 'Do you find it helpful?',
-        hidden: false,
+        hidden: true,
         replyModel: 'scale',
         answers: [
           {
@@ -199,6 +202,7 @@ class FormWelcome extends Component {
             modifier="material"
             className="segment"
             name="answerValues"
+            index="1"
             onChange={event =>
               this.setState({ [event.target.name]: event.target.value })
             }
@@ -230,6 +234,7 @@ class FormWelcome extends Component {
       .catch(err => {
         console.log(err);
       });
+    this.setState({ submitted: true });
   };
 
   render() {
@@ -237,13 +242,25 @@ class FormWelcome extends Component {
       <div className="webForm">
         <img src={logo} className="companyLogo" alt="logo" />
         <hr />
-        <form className="webForm" onSubmit={this.handleSubmit}>
-          {this.state.questions.map(question => (
-            <Fragment key={question.id}>
-              <h3 className="qText">{question.text}</h3>
-              {this.renderSwitch(question)}
-            </Fragment>
-          ))}
+        {this.state.submitted ? (
+          <FormCompletedView />
+        ) : (
+          <FormOpen
+            questions={this.state.questions}
+            handleSubmit={this.handleSubmit}
+            renderSwitch={this.renderSwitch}
+          />
+        )}
+        {/* <form className="webForm" onSubmit={this.handleSubmit}>
+          {this.state.questions.map(
+            question =>
+              question.hidden === false ? (
+                <Fragment key={question.id}>
+                  <h3 className="qText">{question.text}</h3>
+                  {this.renderSwitch(question)}
+                </Fragment>
+              ) : null
+          )}
         </form>
         <Button
           modifier="large--cta"
@@ -251,7 +268,7 @@ class FormWelcome extends Component {
           onClick={this.handleSubmit}
         >
           Submit
-        </Button>
+        </Button> */}
       </div>
     );
   }
