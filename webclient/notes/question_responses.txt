@@ -1,0 +1,5 @@
+responses = [{
+    questionId : 1,
+    answer: 'Happy',
+    score: 1
+}]
