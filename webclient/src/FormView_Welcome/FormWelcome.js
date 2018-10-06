@@ -3,6 +3,8 @@ import { Select, Radio, Segment, Button } from 'react-onsenui';
 
 import './FormWelcome.css';
 import logo from '../assets/align-02.png';
+import FormOpen from './FormOpen.js';
+import FormCompletedView from './FormCompletedView.js';
 
 class FormWelcome extends Component {
   state = {
@@ -11,11 +13,12 @@ class FormWelcome extends Component {
       time: 0,
       start: 0,
     },
+    submitted: false,
     questions: [
       {
         id: 1,
         text: 'Have you had thoughts of suicide within the past 24 hours?',
-        hidden: true,
+        hidden: false,
         replyModel: 'scale',
         answers: [
           {
@@ -64,7 +67,7 @@ class FormWelcome extends Component {
       {
         id: 4,
         text: 'Do you find it helpful?',
-        hidden: false,
+        hidden: true,
         replyModel: 'scale',
         answers: [
           {
@@ -163,7 +166,7 @@ class FormWelcome extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
     const data = new FormData(event.target);
 
@@ -175,7 +178,9 @@ class FormWelcome extends Component {
       method: 'POST',
       body: data,
     });
-  }
+
+    this.setState({ submitted: true });
+  };
 
   renderSwitch(question) {
     const replyModel = question.replyModel;
@@ -215,6 +220,7 @@ class FormWelcome extends Component {
             modifier="material"
             className="segment"
             name={question.id.toString()}
+            index="1"
             onChange={this.onChange}
           >
             {question.answers.map(answer => (
@@ -234,22 +240,15 @@ class FormWelcome extends Component {
       <div className="webForm">
         <img src={logo} className="companyLogo" alt="logo" />
         <hr />
-        <form id="webForm" className="webForm" onSubmit={this.handleSubmit}>
-          {this.state.questions.map(question => (
-            <Fragment key={question.id}>
-              <h3 className="qText">{question.text}</h3>
-              {this.renderSwitch(question)}
-            </Fragment>
-          ))}
-
-          <button
-            type="submit"
-            className="button--large--cta submitBtn"
-            style={{ marginTop: '25px' }}
-          >
-            Submit
-          </button>
-        </form>
+        {this.state.submitted ? (
+          <FormCompletedView />
+        ) : (
+          <FormOpen
+            questions={this.state.questions}
+            handleSubmit={this.handleSubmit}
+            renderSwitch={this.renderSwitch}
+          />
+        )}
       </div>
     );
   }
