@@ -158,19 +158,18 @@ class FormWelcome extends Component {
   //     });
   //   });
   // }
-  onChange = function(e){
-    console.log(e)
-    this.setState({ [e.target.name]: e.target.value })
-  }
+  onChange = function(e) {
+    console.log(e);
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.target);
 
-
     var myForm = document.getElementById('webForm');
     var formData = new FormData(myForm);
-    console.log(formData)
+    console.log(formData);
 
     fetch('/api/form-submit-url', {
       method: 'POST',
@@ -219,7 +218,9 @@ class FormWelcome extends Component {
             onChange={this.onChange}
           >
             {question.answers.map(answer => (
-              <button key={Math.random()} value={answer.score}>{answer.text}</button>
+              <button key={Math.random()} value={answer.score}>
+                {answer.text}
+              </button>
             ))}
           </Segment>
         );
@@ -228,9 +229,7 @@ class FormWelcome extends Component {
     }
   }
 
-
   render() {
-
     return (
       <div className="webForm">
         <img src={logo} className="companyLogo" alt="logo" />
@@ -243,10 +242,14 @@ class FormWelcome extends Component {
             </Fragment>
           ))}
 
-          <button type="submit" class="button--large--cta" style={{ marginTop: '25px' }}>Submit</button>
+          <button
+            type="submit"
+            className="button--large--cta submitBtn"
+            style={{ marginTop: '25px' }}
+          >
+            Submit
+          </button>
         </form>
-
-
       </div>
     );
   }
