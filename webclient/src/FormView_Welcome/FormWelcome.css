@@ -5,5 +5,10 @@
 }
 
 .segment {
-  width: 700px;
+  width: 500px;
+}
+
+.submitBtn {
+  max-width: 400px;
+  margin: 20px auto;
 }

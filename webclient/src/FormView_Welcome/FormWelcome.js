@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Select, Radio, Segment } from 'react-onsenui';
+import { Select, Radio, Segment, Button } from 'react-onsenui';
 
 import './FormWelcome.css';
 import logo from '../assets/align_logo.png';
@@ -14,132 +14,150 @@ class FormWelcome extends Component {
     questions: [
       {
         id: 1,
-        text: 'How are you feeling?',
-        hidden: false,
-        replyModel: 'dropdown',
+        text: 'Have you had thoughts of suicide within the past 24 hours?',
+        hidden: true,
+        replyModel: 'scale',
         answers: [
           {
-            text: 'Happy',
+            text: 'Yes',
             score: 1,
-            followup: 2,
           },
           {
-            text: 'Depressed',
+            text: 'No',
             score: 2,
-          },
-          {
-            text: 'Suicidal',
-            score: 3,
-            flag: true,
           },
         ],
       },
       {
         id: 2,
-        text: 'Have you used alcohol today?',
-        hidden: true,
-        replyModel: 'yesno',
+        text:
+          'Have you ever been diagnosed with a mental health illness or condition',
+        hidden: false,
+        replyModel: 'scale',
         answers: [
           {
-            text: 'No',
+            text: 'Yes',
             score: 1,
           },
           {
-            text: 'Yes',
+            text: 'No',
             score: 2,
           },
         ],
       },
       {
         id: 3,
-        text: 'Are you on any prescription medication?',
+        text: 'Do you currently see a mental health practictioner?',
         hidden: false,
-        replyModel: 'yesno',
+        replyModel: 'scale',
         answers: [
           {
-            text: 'No',
+            text: 'Yes',
             score: 1,
           },
           {
-            text: 'Yes',
+            text: 'No',
             score: 2,
           },
         ],
       },
       {
         id: 4,
+        text: 'Do you find it helpful?',
+        hidden: false,
+        replyModel: 'scale',
+        answers: [
+          {
+            text: 'Yes',
+            score: 1,
+          },
+          {
+            text: 'No',
+            score: 2,
+          },
+        ],
+      },
+      {
+        id: 5,
+        text: 'Have you had any substances or alcohol today?',
+        hidden: false,
+        replyModel: 'scale',
+        answers: [
+          {
+            text: 'Yes',
+            score: 1,
+          },
+          {
+            text: 'No',
+            score: 2,
+          },
+        ],
+      },
+      {
+        id: 6,
         text:
           'I sometimes have trouble distinguishing whether something I experience or perceive may be real or may only be part of my imagination or my dreams',
         hidden: false,
         replyModel: 'scale',
         answers: [
           {
-            text: 'No',
-            score: 1,
+            text: 'Yes, definitely',
+            score: 3,
           },
           {
             text: 'Yes, slightly',
             score: 2,
           },
           {
+            text: 'No',
+            score: 1,
+          },
+        ],
+      },
+      {
+        id: 7,
+        text:
+          'I believe that someone may be planning to cause me harm, or may be about to cause me harm in the near future.',
+        hidden: false,
+        replyModel: 'scale',
+        answers: [
+          {
             text: 'Yes, definitely',
             score: 3,
+          },
+          {
+            text: 'Yes, slightly',
+            score: 2,
+          },
+          {
+            text: 'No',
+            score: 1,
           },
         ],
       },
     ],
-    answerValues: {
-      1: {
-        value: '',
-        score: null,
-      },
-      2: {
-        value: '',
-        score: null,
-      },
-      3: {
-        value: '',
-        score: null,
-      },
-      4: {
-        value: '',
-        score: null,
-      },
-      5: {
-        value: '',
-        score: null,
-      },
-      6: {
-        value: '',
-        score: null,
-      },
-      7: {
-        value: '',
-        score: null,
-      },
-    },
   };
 
   componentDidMount() {
     console.log(this.state.questions);
   }
 
-  startTimer() {
-    this.setState({
-      timer: {
-        isOn: true,
-        time: this.state.timer.time,
-        start: Date.now() - this.state.timer.time,
-      },
-    });
-    this.timed = setInterval(() => {
-      this.setState({
-        timer: {
-          time: Date.now() - this.state.timer.start,
-        },
-      });
-    });
-  }
+  // startTimer() {
+  //   this.setState({
+  //     timer: {
+  //       isOn: true,
+  //       time: this.state.timer.time,
+  //       start: Date.now() - this.state.timer.time,
+  //     },
+  //   });
+  //   this.timed = setInterval(() => {
+  //     this.setState({
+  //       timer: {
+  //         time: Date.now() - this.state.timer.start,
+  //       },
+  //     });
+  //   });
+  // }
 
   renderSwitch(question) {
     const replyModel = question.replyModel;
@@ -148,12 +166,12 @@ class FormWelcome extends Component {
         return (
           <Select
             modifier="material"
-            value="yes"
-            onChange={event =>
+            onChange={function(event) {
+              console.log(question.id);
               this.setState({
-                [this.state.answerValues.question.id]: event.target.value,
-              })
-            }
+                [event.target.name]: event.target.value,
+              });
+            }}
           >
             {question.answers.map(answer => (
               <option name={answer.text} value={answer.score}>
@@ -162,29 +180,29 @@ class FormWelcome extends Component {
             ))}
           </Select>
         );
-      case 'yesno':
-        return (
-          <Fragment>
-            <Radio
-              onChange={event => {
-                this.setState({ value: event.target.checked });
-              }}
-              modifier="material"
-            />
-            {/* <Radio
-              onChange={event => {
-                this.setState({ [event.target.name]: event.target.checked });
-              }}
-              modifier="material"
-              value="No"
-            /> */}
-          </Fragment>
-        );
+      // case 'yesno':
+      //   return (
+      //     <Fragment>
+      //       <Radio
+      //         onChange={event => {
+      //           this.setState({ value: event.target.checked });
+      //         }}
+      //         modifier="material"
+      //       />
+      //     </Fragment>
+      //   );
       case 'scale':
         return (
-          <Segment modifier="material" className="segment">
+          <Segment
+            modifier="material"
+            className="segment"
+            name="answerValues"
+            onChange={event =>
+              this.setState({ [event.target.name]: event.target.value })
+            }
+          >
             {question.answers.map(answer => (
-              <button>{answer.text}</button>
+              <button key={Math.random()}>{answer.text}</button>
             ))}
           </Segment>
         );
@@ -195,10 +213,10 @@ class FormWelcome extends Component {
 
   render() {
     return (
-      <div>
+      <div className="webForm">
         <img src={logo} className="companyLogo" alt="logo" />
         <hr />
-        <form>
+        <form className="webForm">
           {this.state.questions.map(question => (
             <Fragment key={question.id}>
               <h3>{question.text}</h3>
@@ -206,6 +224,9 @@ class FormWelcome extends Component {
             </Fragment>
           ))}
         </form>
+        <Button modifier="large--cta" className="submitBtn">
+          Submit
+        </Button>
       </div>
     );
   }
