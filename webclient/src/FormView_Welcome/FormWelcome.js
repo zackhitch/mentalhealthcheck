@@ -88,7 +88,36 @@ class FormWelcome extends Component {
         ],
       },
     ],
-    username: '',
+    answerValues: {
+      1: {
+        value: '',
+        score: null,
+      },
+      2: {
+        value: '',
+        score: null,
+      },
+      3: {
+        value: '',
+        score: null,
+      },
+      4: {
+        value: '',
+        score: null,
+      },
+      5: {
+        value: '',
+        score: null,
+      },
+      6: {
+        value: '',
+        score: null,
+      },
+      7: {
+        value: '',
+        score: null,
+      },
+    },
   };
 
   componentDidMount() {
@@ -119,9 +148,11 @@ class FormWelcome extends Component {
         return (
           <Select
             modifier="material"
-            value={this.state.value}
+            value="yes"
             onChange={event =>
-              this.setState({ [event.target.name]: event.target.value })
+              this.setState({
+                [this.state.answerValues.question.id]: event.target.value,
+              })
             }
           >
             {question.answers.map(answer => (
@@ -135,9 +166,8 @@ class FormWelcome extends Component {
         return (
           <Fragment>
             <Radio
-              value={question.answers[0]}
               onChange={event => {
-                this.setState({ [event.target.name]: event.target.checked });
+                this.setState({ value: event.target.checked });
               }}
               modifier="material"
             />
