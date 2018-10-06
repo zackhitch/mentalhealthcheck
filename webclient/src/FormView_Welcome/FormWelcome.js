@@ -240,7 +240,7 @@ class FormWelcome extends Component {
         <form className="webForm" onSubmit={this.handleSubmit}>
           {this.state.questions.map(question => (
             <Fragment key={question.id}>
-              <h3>{question.text}</h3>
+              <h3 className="qText">{question.text}</h3>
               {this.renderSwitch(question)}
             </Fragment>
           ))}
