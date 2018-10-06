@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Select, Radio, Segment, Button } from 'react-onsenui';
 import axios from 'axios';
+import db from '../firebase.js';
 
 import './FormWelcome.css';
 import logo from '../assets/align-02.png';
@@ -216,12 +217,15 @@ class FormWelcome extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const questions = this.state.questions;
+    // const questions = this.state.questions;
+    const data = new FormData(event.target);
+    const dataA = JSON.stringify(data);
+    const dataB = JSON.parse(dataA);
 
-    axios
-      .post('https://mhc-xhcwst.firebaseio.com', questions)
-      .then(res => {
-        console.log(res);
+    db.collection('users')
+      .add(dataB)
+      .then(docRef => {
+        console.log(docRef);
       })
       .catch(err => {
         console.log(err);
