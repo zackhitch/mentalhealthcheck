@@ -1,0 +1,16 @@
+{
+  "How are you feeling?": {
+    "1": "Happy",
+    "2": "Sad",
+    "3": "Depressed",
+    "4": "Suicidal"
+  },
+  "Have you used alcohol today?": {
+    "1": "No",
+    "2": "Yes"
+  },
+  "Are you on any prescription medication?": {
+    "1": "No",
+    "2": "Yes"
+  }
+}
