@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Select, Radio, Segment, Button } from 'react-onsenui';
+import axios from 'axios';
 
 import './FormWelcome.css';
-import logo from '../assets/align_logo.png';
+import logo from '../assets/align-02.png';
 
 class FormWelcome extends Component {
   state = {
@@ -202,7 +203,9 @@ class FormWelcome extends Component {
             }
           >
             {question.answers.map(answer => (
-              <button key={Math.random()}>{answer.text}</button>
+              <button key={Math.random()} name={answer.text}>
+                {answer.text}
+              </button>
             ))}
           </Segment>
         );
@@ -211,12 +214,26 @@ class FormWelcome extends Component {
     }
   }
 
+  handleSubmit = event => {
+    event.preventDefault();
+    const questions = this.state.questions;
+
+    axios
+      .post('https://mhc-xhcwst.firebaseio.com', questions)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     return (
       <div className="webForm">
         <img src={logo} className="companyLogo" alt="logo" />
         <hr />
-        <form className="webForm">
+        <form className="webForm" onSubmit={this.handleSubmit}>
           {this.state.questions.map(question => (
             <Fragment key={question.id}>
               <h3>{question.text}</h3>
@@ -224,7 +241,11 @@ class FormWelcome extends Component {
             </Fragment>
           ))}
         </form>
-        <Button modifier="large--cta" className="submitBtn">
+        <Button
+          modifier="large--cta"
+          className="submitBtn"
+          onClick={this.handleSubmit}
+        >
           Submit
         </Button>
       </div>
