@@ -3,3 +3,7 @@
   max-width: 150px;
   max-height: 150px;
 }
+
+.segment {
+  min-width: 700px;
+}

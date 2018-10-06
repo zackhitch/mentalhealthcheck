@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Select } from 'react-onsenui';
+import { Select, Radio, Segment } from 'react-onsenui';
 
 import './FormWelcome.css';
 import logo from '../assets/align_logo.png';
@@ -16,6 +16,7 @@ class FormWelcome extends Component {
         id: 1,
         text: 'How are you feeling?',
         hidden: false,
+        replyModel: 'dropdown',
         answers: [
           {
             text: 'Happy',
@@ -37,6 +38,7 @@ class FormWelcome extends Component {
         id: 2,
         text: 'Have you used alcohol today?',
         hidden: true,
+        replyModel: 'yesno',
         answers: [
           {
             text: 'No',
@@ -52,6 +54,7 @@ class FormWelcome extends Component {
         id: 3,
         text: 'Are you on any prescription medication?',
         hidden: false,
+        replyModel: 'yesno',
         answers: [
           {
             text: 'No',
@@ -60,6 +63,27 @@ class FormWelcome extends Component {
           {
             text: 'Yes',
             score: 2,
+          },
+        ],
+      },
+      {
+        id: 4,
+        text:
+          'I sometimes have trouble distinguishing whether something I experience or perceive may be real or may only be part of my imagination or my dreams',
+        hidden: false,
+        replyModel: 'scale',
+        answers: [
+          {
+            text: 'No',
+            score: 1,
+          },
+          {
+            text: 'Yes, slightly',
+            score: 2,
+          },
+          {
+            text: 'Yes, definitely',
+            score: 3,
           },
         ],
       },
@@ -88,6 +112,57 @@ class FormWelcome extends Component {
     });
   }
 
+  renderSwitch(question) {
+    const replyModel = question.replyModel;
+    switch (replyModel) {
+      case 'dropdown':
+        return (
+          <Select
+            modifier="material"
+            value={this.state.value}
+            onChange={event =>
+              this.setState({ [event.target.name]: event.target.value })
+            }
+          >
+            {question.answers.map(answer => (
+              <option name={answer.text} value={answer.score}>
+                {answer.text}
+              </option>
+            ))}
+          </Select>
+        );
+      case 'yesno':
+        return (
+          <Fragment>
+            <Radio
+              value={question.answers[0]}
+              onChange={event => {
+                this.setState({ [event.target.name]: event.target.checked });
+              }}
+              modifier="material"
+            />
+            {/* <Radio
+              onChange={event => {
+                this.setState({ [event.target.name]: event.target.checked });
+              }}
+              modifier="material"
+              value="No"
+            /> */}
+          </Fragment>
+        );
+      case 'scale':
+        return (
+          <Segment modifier="material" className="segment">
+            {question.answers.map(answer => (
+              <button>{answer.text}</button>
+            ))}
+          </Segment>
+        );
+      default:
+        return <h2>This is a test</h2>;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -95,21 +170,9 @@ class FormWelcome extends Component {
         <hr />
         <form>
           {this.state.questions.map(question => (
-            <Fragment>
+            <Fragment key={question.id}>
               <h3>{question.text}</h3>
-              <Select
-                modifier="material"
-                value={this.state.value}
-                onChange={event =>
-                  this.setState({ [event.target.name]: event.target.value })
-                }
-              >
-                {question.answers.map(answer => (
-                  <option name={answer.text} value={answer.score}>
-                    {answer.text}
-                  </option>
-                ))}
-              </Select>
+              {this.renderSwitch(question)}
             </Fragment>
           ))}
         </form>
