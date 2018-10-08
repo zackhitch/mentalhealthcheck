@@ -1,12 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import { Select, Radio, Segment, Button } from 'react-onsenui';
-import axios from 'axios';
-import db from '../firebase.js';
 
 import './FormWelcome.css';
 import logo from '../assets/align-02.png';
-import FormCompletedView from '../FormCompletedView/FormCompletedView.js';
-import FormOpen from './FormOpen';
+import FormOpen from './FormOpen.js';
+import FormCompletedView from './FormCompletedView.js';
 
 class FormWelcome extends Component {
   state = {
@@ -163,6 +161,26 @@ class FormWelcome extends Component {
   //     });
   //   });
   // }
+  onChange = function(e) {
+    console.log(e);
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+
+    var myForm = document.getElementById('webForm');
+    var formData = new FormData(myForm);
+    console.log(formData);
+
+    fetch('/api/form-submit-url', {
+      method: 'POST',
+      body: data,
+    });
+
+    this.setState({ submitted: true });
+  };
 
   renderSwitch(question) {
     const replyModel = question.replyModel;
@@ -201,14 +219,12 @@ class FormWelcome extends Component {
           <Segment
             modifier="material"
             className="segment"
-            name="answerValues"
+            name={question.id.toString()}
             index="1"
-            onChange={event =>
-              this.setState({ [event.target.name]: event.target.value })
-            }
+            onChange={this.onChange}
           >
             {question.answers.map(answer => (
-              <button key={Math.random()} name={answer.text}>
+              <button key={Math.random()} value={answer.score}>
                 {answer.text}
               </button>
             ))}
@@ -218,24 +234,6 @@ class FormWelcome extends Component {
         return <h2>This is a test</h2>;
     }
   }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    // const questions = this.state.questions;
-    const data = new FormData(event.target);
-    const dataA = JSON.stringify(data);
-    const dataB = JSON.parse(dataA);
-
-    db.collection('users')
-      .add(dataB)
-      .then(docRef => {
-        console.log(docRef);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    this.setState({ submitted: true });
-  };
 
   render() {
     return (
