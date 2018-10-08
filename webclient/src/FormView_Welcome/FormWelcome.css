@@ -26,4 +26,8 @@
   .submitBtn {
     max-width: 250px;
   }
+
+  .completedDiv {
+    margin: 20px;
+  }
 }
